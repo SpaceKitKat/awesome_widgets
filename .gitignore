@@ -1,0 +1,11 @@
+# defaults
+debian
+themes/default
+themes/sky
+themes/zenburn
+
+#images
+*.png
+*.jpg
+
+
