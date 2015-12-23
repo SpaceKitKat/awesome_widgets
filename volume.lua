@@ -1,35 +1,36 @@
 volume_widget = widget({ type = "textbox", name = "tb_volume",
                          align = "right" })
 
-function update_volume(widget)
-    local fd = io.popen("amixer sget Master")
-    local status = fd:read("*all")
-    fd:close()
+-- function update_volume(widget)
+--     local fd = io.popen("amixer sget Master")
+--     local status = fd:read("*all")
+--     fd:close()
 
-    local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
-    -- volume = string.format("% 3d", volume)
+--     local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
+--     -- volume = string.format("% 3d", volume)
 
-    status = string.match(status, "%[(o[^%]]*)%]")
+--     status = string.match(status, "%[(o[^%]]*)%]")
 
-    -- starting colour
-    local sr, sg, sb = 0x3F, 0x3F, 0x3F
-    -- ending colour
-    local er, eg, eb = 0xDC, 0xDC, 0xCC
+--     -- starting colour
+--     local sr, sg, sb = 0x3F, 0x3F, 0x3F
+--     -- ending colour
+--     local er, eg, eb = 0xDC, 0xDC, 0xCC
 
-    local ir = math.floor(volume * (er - sr) + sr)
-    local ig = math.floor(volume * (eg - sg) + sg)
-    local ib = math.floor(volume * (eb - sb) + sb)
-    interpol_colour = string.format("%.2x%.2x%.2x", ir, ig, ib)
-    if string.find(status, "on", 1, true) then
-        volume = " <span background='#" .. interpol_colour .. "'>   </span>"
-    else
-        volume = " <span color='red' background='#" .. interpol_colour .. "'> M </span>"
-    end
-    widget.text = volume
- end
+--     local ir = math.floor(volume * (er - sr) + sr)
+--     local ig = math.floor(volume * (eg - sg) + sg)
+--     local ib = math.floor(volume * (eb - sb) + sb)
+--     interpol_colour = string.format("%.2x%.2x%.2x", ir, ig, ib)
+--     if string.find(status, "on", 1, true) then
+--         volume = " <span background='#" .. interpol_colour .. "'>   </span>"
+--     else
+--         volume = " <span color='red' background='#" .. interpol_colour .. "'> M </span>"
+--     end
+--     widget.text = volume
+--  end
 
-update_volume(volume_widget)
-awful.hooks.timer.register(1, function () update_volume(volume_widget) end)
+-- update_volume(volume_widget)
+-- (!) deprecated shit
+-- awful.hooks.timer.register(1, function () update_volume(volume_widget) end)
 
 
 
@@ -39,30 +40,34 @@ awful.hooks.timer.register(1, function () update_volume(volume_widget) end)
 -- volume_widget = wibox.widget.textbox()
 -- volume_widget:set_align("right")
 
--- function update_volume(widget)
---    local fd = io.popen("amixer sget Master")
---    local status = fd:read("*all")
---    fd:close()
+function update_volume(widget)
+   local fd = io.popen("amixer sget Master")
+   local status = fd:read("*all")
+   fd:close()
 
---    -- local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
---    local volume = string.match(status, "(%d?%d?%d)%%")
---    volume = string.format("% 3d", volume)
+   -- local volume = tonumber(string.match(status, "(%d?%d?%d)%%")) / 100
+   local volume = string.match(status, "(%d?%d?%d)%%")
+   volume = string.format("% 3d", volume)
 
---    status = string.match(status, "%[(o[^%]]*)%]")
+   status = string.match(status, "%[(o[^%]]*)%]")
 
---    if string.find(status, "on", 1, true) then
---        -- For the volume numbers
---        volume = volume .. "%"
---    else
---        -- For the mute button
---        volume = volume .. "M"
+   if string.find(status, "on", 1, true) then
+       -- For the volume numbers
+       volume = " vol:" .. volume .. "%"
+   else
+       -- For the mute button
+       volume = " vol:" .. volume .. "/M"
 
---    end
---    widget:set_markup(volume)
--- end
+   end
+   -- (!) awesome 3.5
+   -- widget:set_markup(volume)
+   widget.text = volume
+end
 
--- update_volume(volume_widget)
+update_volume(volume_widget)
 
--- mytimer = timer({ timeout = 0.2 })
+mytimer = timer({ timeout = 0.2 })
+-- (!) awesome 3.5
 -- mytimer:connect_signal("timeout", function () update_volume(volume_widget) end)
--- mytimer:start()
+mytimer:add_signal("timeout", function () update_volume(volume_widget) end)
+mytimer:start()
