@@ -20,15 +20,11 @@ function update_volume(widget)
        volume = " vol:" .. volume .. "/M"
 
    end
-   -- (!) awesome 3.5
-   -- widget:set_markup(volume)
    widget.text = volume
 end
 
 update_volume(volume_widget)
 
 mytimer = timer({ timeout = 0.2 })
--- (!) awesome 3.5
--- mytimer:connect_signal("timeout", function () update_volume(volume_widget) end)
 mytimer:add_signal("timeout", function () update_volume(volume_widget) end)
 mytimer:start()
