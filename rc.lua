@@ -117,9 +117,6 @@ batwidget:set_background_color(nil)
 batwidget:set_border_color("#FFFFFF")
 batwidget:set_color("#AECF96")
 batwidget:set_gradient_colors({"#FF5700","#88A175","#AECF96"})
--- vv 3.5 syntax
--- batwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 10 },
---     stops = { { 0, "#AECF96" }, { 0.5, "#88A175" }, { 1, "#FF5656" }}})
 vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT0")
 
   -- updated every 61 seconds, requests the current battery charge
