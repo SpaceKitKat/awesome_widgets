@@ -122,6 +122,14 @@ vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT0")
   -- updated every 61 seconds, requests the current battery charge
   --  level and displays a progressbar, provides "BAT0" battery ID as an
   --  argument
+
+-- ram widget
+memwidget = widget({ type = "textbox" })
+vicious.register(memwidget, vicious.widgets.mem, 'mem: $1%<span color="#cccccc"> | </span>', 13)
+
+-- wifi widget
+wifiwidget = widget({ type = "textbox" })
+vicious.register(wifiwidget, vicious.widgets.wifi, ' <span color="#7F9F7F">${ssid}</span>@<span color="#7F9F7F">${linp}%</span> ', 2, "wlan0")
 -- (+)
 
 -- Create a systray
@@ -204,6 +212,8 @@ for s = 1, screen.count() do
         },
         mylayoutbox[s],
         mytextclock,
+        memwidget,
+        wifiwidget,
         volume_widget,
         s == 1 and mysystray or nil,
         mytasklist[s],
