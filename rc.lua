@@ -123,13 +123,13 @@ vicious.register(batwidget, vicious.widgets.bat, "$2", 61, "BAT0")
   --  level and displays a progressbar, provides "BAT0" battery ID as an
   --  argument
 
--- ram widget
+-- ram widget (display percent mem usage (used/total))
 memwidget = widget({ type = "textbox" })
 vicious.register(memwidget, vicious.widgets.mem, 'mem: $1%<span color="#cccccc"> | </span>', 13)
 
--- wifi widget
+-- wifi widget (display essid and percent link quality)
 wifiwidget = widget({ type = "textbox" })
-vicious.register(wifiwidget, vicious.widgets.wifi, ' <span color="#7F9F7F">${ssid}</span>@<span color="#7F9F7F">${linp}%</span> ', 2, "wlan0")
+vicious.register(wifiwidget, vicious.widgets.wifi, ' <span color="#7F9F7F">${ssid}</span>@<span color="#7F9F7F">${linp}% | </span> ', 2, "wlan0")
 -- (+)
 
 -- Create a systray
@@ -210,11 +210,12 @@ for s = 1, screen.count() do
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
+        -- first to last --> right to left
         mylayoutbox[s],
         mytextclock,
+        volume_widget,
         memwidget,
         wifiwidget,
-        volume_widget,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
