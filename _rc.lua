@@ -1,10 +1,10 @@
 -- Standard awesome library
 local gears = require("gears")
-awful = require("awful")
+local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
 -- Widget and layout library
-wibox = require("wibox")
+local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
@@ -13,11 +13,6 @@ local menubar = require("menubar")
 
 -- Load Debian menu entries
 require("debian.menu")
-
--- (+) Widget library
-vicious = require("vicious")
-widgets = require("vicious.widgets")
-require("volume")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -91,8 +86,7 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5 }, s, layouts[1])
-
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 -- }}}
 
@@ -121,36 +115,6 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
-
--- (+)
--- Battery widget
-batwidget = awful.widget.progressbar()
-batwidget:set_width(15)
-batwidget:set_height(50)
-batwidget:set_vertical(true)
-batwidget:set_background_color(nil)
-batwidget:set_border_color("#FFFFFF")
-batwidget:set_color("#FFFFFF")
---batwidget:set_color({type="linear", from = {0, 0}, to = {0, 10}, stops = { {0, "#000000"}, {1.0, "#FFFFFF"} } })
-vicious.register(batwidget, vicious.widgets.bat, "$2 | </span> ", 61, "BAT0")
-
-  -- updated every 61 seconds, requests the current battery charge
-  --  level and displays a progressbar, provides "BAT0" battery ID as an
-  --  argument
-
--- ram widget (display percent mem usage (used/total))
-memwidget = wibox.widget.textbox()
-vicious.register(memwidget, vicious.widgets.mem, 'mem: $1%<span color="#cccccc"> | </span>', 13)
---vicious.register(memwidget, vicious.widgets.mem, "$1% ($2MB/$3MB)", 13)
-
--- wifi widget (display essid and percent link quality)
-wifiwidget = wibox.widget.textbox()
--- last arg should be name of wireless interface (checkout iwcofig)
-vicious.register(wifiwidget, vicious.widgets.wifi, ' <span color="#7F9F7F">${ssid}</span>@<span color="#7F9F7F">${linp}% | </span> ', 2, "wlp62s0")
--- (+)
-
--- Create a systray
-mysystray = wibox.widget.systray()
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -224,7 +188,6 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
-    left_layout:add(batwidget)
     left_layout:add(mylauncher)
     left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
@@ -232,11 +195,8 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
-    right_layout:add(memwidget)
-    right_layout:add(wifiwidget)
-    right_layout:add(volume_widget)
     right_layout:add(mytextclock)
---    right_layout:add(mylayoutbox[s])
+    right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
     local layout = wibox.layout.align.horizontal()
@@ -258,28 +218,6 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    -- (+) Volume control
-    awful.key({ modkey, "Control" }, "Up", function ()
-      awful.util.spawn("amixer set Master 2%+", false) end),
-    awful.key({ modkey, "Control" }, "Down", function ()
-      awful.util.spawn("amixer set Master 2%-", false) end),
-    awful.key({ modkey,           }, "0", function ()
-      awful.util.spawn("amixer -D pulse set Master 1+ toggle", false) end),
-    -- (+) Brightness control
-    awful.key({ modkey, "Control" }, "Left", function ()
-      awful.util.spawn("xbacklight -dec 15") end),
-    awful.key({ modkey, "Control" }, "Right", function ()
-      awful.util.spawn("xbacklight -inc 15") end),
-    awful.key({ modkey, "Control" }, "d", function ()
-      awful.util.spawn("xbacklight -set 15") end),
-    awful.key({ modkey, "Control" }, "b", function ()
-      awful.util.spawn("xbacklight -set 85") end),
-    -- (+) Mouse activation
-    awful.key({ modkey, "Control" }, "m", function ()
-      awful.util.spawn("xinput --disable 13") end),
-    awful.key({ modkey, "Shift" }, "m", function ()
-      awful.util.spawn("xinput --enable 13") end),
-
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -360,16 +298,10 @@ clientkeys = awful.util.table.join(
         end)
 )
 
---(+) Compute the maximum number of digit we need, limited to 9
-keynumber = 0
-for s = 1, screen.count() do
-   keynumber = math.min(9, math.max(#tags[s], keynumber));
-end
-
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, keynumber do
+for i = 1, 9 do
     globalkeys = awful.util.table.join(globalkeys,
         -- View tag only.
         awful.key({ modkey }, "#" .. i + 9,
