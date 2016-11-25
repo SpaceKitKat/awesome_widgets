@@ -2,15 +2,19 @@ volume_widget = wibox.widget.textbox()
 -- volume_widget:set_align("right")
 
 function update_volume(widget)
-   local fd = io.popen("amixer sget Master")
-   local status = fd:read("*all")
-   fd:close()
+   local fdMaster = io.popen("amixer sget Master")
+   local statusMaster = fdMaster:read("*all")
+   fdMaster:close()
 
+   -- Capture mute from Master
+   statusMaster = string.match(statusMaster, "%[(o[^%]]*)%]")
+
+   -- Capture volume from PCM
+   local fd = io.popen("amixer sget PCM")
+   local status = fd:read("*all")
    local volume = tonumber(string.match(status, "(%d?%d?%d)%%"))
 
-   status = string.match(status, "%[(o[^%]]*)%]")
-
-   if string.find(status, "on", 1, true) then
+   if string.find(statusMaster, "on", 1, true) then
        -- For the volume numbers
        volume = "vol:" .. volume .. "% | "
    else

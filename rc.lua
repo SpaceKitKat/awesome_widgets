@@ -260,15 +260,20 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     -- (+) Volume control
     awful.key({ modkey, "Control" }, "Up", function ()
-      awful.util.spawn("amixer set Master 2%+", false) end),
+      awful.util.spawn("amixer -c 0 set PCM 2%+", false) end),
     awful.key({ modkey, "Control" }, "Down", function ()
-      awful.util.spawn("amixer set Master 2%-", false) end),
-    awful.key({ modkey,           }, "0", function ()
-      awful.util.spawn("amixer -D pulse set Master 1+ toggle", false) end),
+      awful.util.spawn("amixer -c 0 set PCM 2%-", false) end),
+    -- unmute causes PCM to be @ 0db!!!
+    -- awful.key({ modkey,           }, "0", function ()
+    --  awful.util.spawn("amixer -D pulse set Master 1+ toggle", false) end),
     -- (+) Brightness control
     awful.key({ modkey, "Control" }, "Left", function ()
+      awful.util.spawn("xbacklight -dec 5") end),
+    awful.key({ modkey, "Shift" }, "Left", function ()
       awful.util.spawn("xbacklight -dec 15") end),
     awful.key({ modkey, "Control" }, "Right", function ()
+      awful.util.spawn("xbacklight -inc 5") end),
+    awful.key({ modkey, "Shift" }, "Right", function ()
       awful.util.spawn("xbacklight -inc 15") end),
     awful.key({ modkey, "Control" }, "d", function ()
       awful.util.spawn("xbacklight -set 15") end),
