@@ -284,6 +284,9 @@ globalkeys = awful.util.table.join(
       awful.util.spawn("xinput --disable 13") end),
     awful.key({ modkey, "Shift" }, "m", function ()
       awful.util.spawn("xinput --enable 13") end),
+    -- (+) Sleep command 
+    awful.key({ modkey,         }, "z", function ()
+      awful.util.spawn("systemctl suspend") end),
 
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
