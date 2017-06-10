@@ -19,6 +19,18 @@ vicious = require("vicious")
 widgets = require("vicious.widgets")
 require("volume")
 
+-- (+) Color Palete
+local cyan="#7f4de6"
+local black="#000000"
+local dblue="#00ccff" -- concatenation error (invalid markup/utf8)
+local dgrey="#333333" -- concatenation error (invalid markup/utf8)
+local green="#7fb219"
+local lblue="#6c9eab" -- concatenation error (invalid markup/utf8)
+local lgrey="#d2d2d2" -- concatenation error (invalid markup/utf8)
+local lime="#7F9F7F"
+local red="#e04613"                           
+local white="#ffffff"
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -46,7 +58,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init("/usr/share/awesome/themes/sx/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
@@ -124,29 +136,20 @@ mytextclock = awful.widget.textclock()
 
 -- (+)
 -- Battery widget
-batwidget = awful.widget.progressbar()
-batwidget:set_width(15)
-batwidget:set_height(50)
-batwidget:set_vertical(true)
-batwidget:set_background_color(nil)
-batwidget:set_border_color("#FFFFFF")
-batwidget:set_color("#FFFFFF")
---batwidget:set_color({type="linear", from = {0, 0}, to = {0, 10}, stops = { {0, "#000000"}, {1.0, "#FFFFFF"} } })
-vicious.register(batwidget, vicious.widgets.bat, "$2 | </span> ", 61, "BAT0")
+-- Updated every 61 seconds. Requests the current battery charge
+-- level and displays percent and time remaining.
+batwidget = wibox.widget.textbox()
+vicious.register(batwidget, vicious.widgets.bat, ' [ <span color="cyan">Batt</span>: <span color="cyan">$2%</span> | <span color="cyan">$3</span> ] ', 61, "BAT1")
 
-  -- updated every 61 seconds, requests the current battery charge
-  --  level and displays a progressbar, provides "BAT0" battery ID as an
-  --  argument
-
--- ram widget (display percent mem usage (used/total))
+-- Ram widget (display percent mem usage (used/total))
 memwidget = wibox.widget.textbox()
-vicious.register(memwidget, vicious.widgets.mem, 'mem: $1%<span color="#cccccc"> | </span>', 13)
+vicious.register(memwidget, vicious.widgets.mem, ' [ <span color="lime">Mem</span>: <span color="lime">$1%</span> |', 13)
 --vicious.register(memwidget, vicious.widgets.mem, "$1% ($2MB/$3MB)", 13)
 
--- wifi widget (display essid and percent link quality)
+-- Wifi widget (display essid and percent link quality)
 wifiwidget = wibox.widget.textbox()
 -- last arg should be name of wireless interface (checkout iwcofig)
-vicious.register(wifiwidget, vicious.widgets.wifi, ' <span color="#7F9F7F">${ssid}</span>@<span color="#7F9F7F">${linp}% | </span> ', 2, "wlp62s0")
+vicious.register(wifiwidget, vicious.widgets.wifi, ' <span color="white">${ssid}</span>@<span color="white">${linp}% | </span> ', 2, "wlp62s0")
 -- (+)
 
 -- Create a systray
